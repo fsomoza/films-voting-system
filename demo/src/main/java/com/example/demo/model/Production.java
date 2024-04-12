@@ -6,7 +6,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "prod_type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Production {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
