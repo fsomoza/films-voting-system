@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.EmployeeDTO;
+import com.example.demo.dto.EmployeeResponseDTO;
 import com.example.demo.exception.EmailAlreadyExistsException;
 import com.example.demo.exception.EmployeeNotFoundException;
 import com.example.demo.model.Employee;
@@ -9,6 +10,7 @@ import com.example.demo.service.EmployeeService;
 import com.example.demo.utils.ConversionUtil;
 import com.example.demo.validator.EmployeeValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,20 +20,23 @@ import java.util.Optional;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+    private final PasswordEncoder passwordEncoder;
     private final EmployeeRepository employeeRepository;
     @Autowired
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
     @Override
     @Transactional
-    public Employee saveEmployee(EmployeeDTO employeeDto) {
-          EmployeeValidator.validate(employeeDto);
+    public EmployeeResponseDTO saveEmployee(EmployeeDTO employeeDto) {
+          EmployeeValidator.validate(employeeDto, false);
           this.checkIfEmailExists(employeeDto.getEmail());
+          employeeDto.setPassword(passwordEncoder.encode(employeeDto.getPassword()));
           Employee employee =  ConversionUtil.dtoToEntity(employeeDto);
-          return employeeRepository.save(employee);
+          return ConversionUtil.entityToDto(employeeRepository.save(employee));
     }
 
     @Override
@@ -76,9 +81,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public Employee updateEmployee(EmployeeDTO employee, Long id) throws Exception {
+    public EmployeeResponseDTO updateEmployee(EmployeeDTO employee, Long id) throws Exception {
 
-        EmployeeValidator.validate(employee);
+        EmployeeValidator.validate(employee, true);
         Employee employeeDb = this.getEmployeeById(id);
         this.checkIfEmailExists(employee.getEmail(),id);
 
@@ -86,7 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDb.setFrontend(employee.isFrontend());
         employeeDb.setAge(employee.getAge());
         employeeDb.setEmail(employee.getEmail());
-        return employeeRepository.save(employeeDb);
+        return ConversionUtil.entityToDto(employeeRepository.save(employeeDb));
     }
 
     @Override

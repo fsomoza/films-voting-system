@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeDTO;
+import com.example.demo.dto.EmployeeResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,14 +22,13 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeDTO employee) {
+    public ResponseEntity<EmployeeResponseDTO> createEmployee(@RequestBody EmployeeDTO employee) {
         return ResponseEntity.ok(employeeService.saveEmployee(employee));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDetails) throws Exception {
-        final Employee updatedEmployee = employeeService.updateEmployee(employeeDetails, id);
-        return ResponseEntity.ok(updatedEmployee);
+    public ResponseEntity<EmployeeResponseDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDetails) throws Exception {
+        return ResponseEntity.ok(employeeService.updateEmployee(employeeDetails, id));
     }
 
     @GetMapping("/{id}")
