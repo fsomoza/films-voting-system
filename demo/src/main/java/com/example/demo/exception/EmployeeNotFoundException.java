@@ -1,7 +1,11 @@
 package com.example.demo.exception;
 
+import lombok.Getter;
+
+@Getter
 public class EmployeeNotFoundException extends RuntimeException {
-    private Long employeeId;
+    // Getter method for the employee ID
+    private final Long employeeId;
 
     // Constructor with the ID of the not found employee
     public EmployeeNotFoundException(Long employeeId) {
@@ -9,8 +13,4 @@ public class EmployeeNotFoundException extends RuntimeException {
         this.employeeId = employeeId;
     }
 
-    // Getter method for the employee ID
-    public Long getEmployeeId() {
-        return employeeId;
-    }
 }

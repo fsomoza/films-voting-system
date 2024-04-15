@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.EmployeeDTO;
+import com.example.demo.exception.EmailAlreadyExistsException;
 import com.example.demo.exception.EmployeeNotFoundException;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
@@ -28,6 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public Employee saveEmployee(EmployeeDTO employeeDto) {
           EmployeeValidator.validate(employeeDto);
+          this.checkIfEmailExists(employeeDto.getEmail());
           Employee employee =  ConversionUtil.dtoToEntity(employeeDto);
           return employeeRepository.save(employee);
     }
@@ -50,12 +52,35 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
+    public Boolean checkIfEmailExists(String email, long id){
+
+        if (employeeRepository.existsByEmailAndIdNot(email,id)){
+            throw new EmailAlreadyExistsException();
+        }else{
+            return true;
+        }
+
+    }
+
+    public Boolean checkIfEmailExists(String email){
+
+        if (employeeRepository.existsByEmail(email)){
+            throw new EmailAlreadyExistsException();
+        }else{
+            return true;
+        }
+
+    }
+
+
+
     @Override
     @Transactional
     public Employee updateEmployee(EmployeeDTO employee, Long id) throws Exception {
 
         EmployeeValidator.validate(employee);
         Employee employeeDb = this.getEmployeeById(id);
+        this.checkIfEmailExists(employee.getEmail(),id);
 
         employeeDb.setName(employee.getName());
         employeeDb.setFrontend(employee.isFrontend());

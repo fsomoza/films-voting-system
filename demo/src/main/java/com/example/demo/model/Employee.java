@@ -12,6 +12,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(unique = true)
     private String email;
     private boolean isFrontend; // true para frontend, false para backend
     private int age;
