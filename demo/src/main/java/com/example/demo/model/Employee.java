@@ -3,6 +3,8 @@ package com.example.demo.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -16,4 +18,7 @@ public class Employee {
     private String email;
     private boolean isFrontend; // true para frontend, false para backend
     private int age;
+    @Column(nullable = false)
+    private String password;
+
 }
