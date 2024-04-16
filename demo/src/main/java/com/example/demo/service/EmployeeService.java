@@ -8,8 +8,11 @@ import com.example.demo.model.Employee;
 
 public interface EmployeeService {
     EmployeeResponseDTO saveEmployee(EmployeeDTO employee);
-    List<Employee> getAllEmployees();
+    List<EmployeeResponseDTO> getAllEmployees();
     Employee getEmployeeById(Long id);
+
+    EmployeeResponseDTO getEmployeeDtoById(Long id);
+
     EmployeeResponseDTO updateEmployee(EmployeeDTO employee, Long id) throws Exception;
     void deleteEmployee(Long id);
 }
