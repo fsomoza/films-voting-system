@@ -25,7 +25,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({EmailAlreadyExistsException.class})
     public ResponseEntity<Object> handleEmailAlreadyExistsException(RuntimeException ex) {
-        ErrorResponse errorResponse = new ErrorResponse("Email must be an unique field", ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse("error", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({FilmAlreadyExistsException.class})
+    public ResponseEntity<Object> handleFilmAlreadyExistsException(RuntimeException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("error", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 

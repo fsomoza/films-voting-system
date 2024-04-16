@@ -8,7 +8,7 @@ import com.example.demo.model.Employee;
 import com.example.demo.model.Role;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
-import com.example.demo.utils.ConversionUtil;
+import com.example.demo.utils.ConversionUtils;
 import com.example.demo.validator.ValidatorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
           ValidatorUtils.validateEmployee(employeeDto, false);
           this.checkIfEmailExists(employeeDto.getEmail());
           employeeDto.setPassword(passwordEncoder.encode(employeeDto.getPassword()));
-          Employee employee =  ConversionUtil.dtoToEntity(employeeDto);
+          Employee employee =  ConversionUtils.dtoToEntity(employeeDto);
           employee.setRole(Role.USER);
           return employeeRepository.save(employee);
     }
@@ -45,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeResponseDTO> getAllEmployees() {
         return employeeRepository.findAll().stream()       // Convert the list to a stream
-                .map(ConversionUtil::entityToDto)  // Map each entity to DTO
+                .map(ConversionUtils::entityToDto)  // Map each entity to DTO
                 .collect(Collectors.toList());  // Collect results into a list
     }
 
@@ -67,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee result;
         Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isPresent()){
-            return ConversionUtil.entityToDto(employee.get());
+            return ConversionUtils.entityToDto(employee.get());
         }else{
             throw new EmployeeNotFoundException(id);
         }
@@ -108,7 +108,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDb.setFrontend(employee.isFrontend());
         employeeDb.setAge(employee.getAge());
         employeeDb.setEmail(employee.getEmail());
-        return ConversionUtil.entityToDto(employeeRepository.save(employeeDb));
+        return ConversionUtils.entityToDto(employeeRepository.save(employeeDb));
     }
 
     @Override
