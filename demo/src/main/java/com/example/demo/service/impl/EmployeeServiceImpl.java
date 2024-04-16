@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -40,10 +41,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
-      return   employeeRepository.findAll();
-
+    public List<EmployeeResponseDTO> getAllEmployees() {
+        return employeeRepository.findAll().stream()       // Convert the list to a stream
+                .map(ConversionUtil::entityToDto)  // Map each entity to DTO
+                .collect(Collectors.toList());  // Collect results into a list
     }
+
 
     @Override
     public Employee getEmployeeById(Long id) {
@@ -51,6 +54,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isPresent()){
             return  employee.get();
+        }else{
+            throw new EmployeeNotFoundException(id);
+        }
+
+    }
+
+    @Override
+    public EmployeeResponseDTO getEmployeeDtoById(Long id) {
+        Employee result;
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isPresent()){
+            return ConversionUtil.entityToDto(employee.get());
         }else{
             throw new EmployeeNotFoundException(id);
         }
