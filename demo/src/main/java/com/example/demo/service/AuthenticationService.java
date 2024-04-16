@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.model.AuthenticationResponse;
 import com.example.demo.model.Employee;
 import com.example.demo.model.Token;
@@ -39,24 +40,9 @@ public class AuthenticationService {
         this.employeeService = employeeService;
     }
 
-    public AuthenticationResponse register(Employee request) {
+    public AuthenticationResponse register(EmployeeDTO request) {
 
-        // check if user already exist. if exist than authenticate the user
-        if(repository.findByEmail(request.getUsername()).isPresent()) {
-            return new AuthenticationResponse(null, "User already exist");
-        }
-
-        Employee employee = new Employee();
-        employee.setName(request.getName());
-        employee.setAge(request.getAge());
-        employee.setFrontend(request.isFrontend());
-        employee.setEmail(request.getEmail());
-        employee.setPassword(passwordEncoder.encode(request.getPassword()));
-
-
-        employee.setRole(request.getRole());
-
-        employee = repository.save(employee);
+       Employee employee = employeeService.saveEmployee(request);
 
         String jwt = jwtService.generateToken(employee);
 

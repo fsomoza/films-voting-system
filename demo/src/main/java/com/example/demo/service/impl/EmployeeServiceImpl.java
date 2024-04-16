@@ -5,10 +5,11 @@ import com.example.demo.dto.EmployeeResponseDTO;
 import com.example.demo.exception.EmailAlreadyExistsException;
 import com.example.demo.exception.EmployeeNotFoundException;
 import com.example.demo.model.Employee;
+import com.example.demo.model.Role;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.utils.ConversionUtil;
-import com.example.demo.validator.EmployeeValidator;
+import com.example.demo.validator.ValidatorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public EmployeeResponseDTO saveEmployee(EmployeeDTO employeeDto) {
-          EmployeeValidator.validate(employeeDto, false);
+    public Employee saveEmployee(EmployeeDTO employeeDto) {
+          ValidatorUtils.validateEmployee(employeeDto, false);
           this.checkIfEmailExists(employeeDto.getEmail());
           employeeDto.setPassword(passwordEncoder.encode(employeeDto.getPassword()));
           Employee employee =  ConversionUtil.dtoToEntity(employeeDto);
-          return ConversionUtil.entityToDto(employeeRepository.save(employee));
+          employee.setRole(Role.USER);
+          return employeeRepository.save(employee);
     }
 
     @Override
@@ -98,7 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public EmployeeResponseDTO updateEmployee(EmployeeDTO employee, Long id) throws Exception {
 
-        EmployeeValidator.validate(employee, true);
+        ValidatorUtils.validateEmployee(employee, true);
         Employee employeeDb = this.getEmployeeById(id);
         this.checkIfEmailExists(employee.getEmail(),id);
 

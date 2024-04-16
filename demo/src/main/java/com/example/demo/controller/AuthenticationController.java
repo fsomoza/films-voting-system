@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.model.AuthenticationResponse;
 import com.example.demo.model.Employee;
 import com.example.demo.service.AuthenticationService;
@@ -20,7 +21,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody Employee request
+            @RequestBody EmployeeDTO request
             ) {
         return ResponseEntity.ok(authService.register(request));
     }
