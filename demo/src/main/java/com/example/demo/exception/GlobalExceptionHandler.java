@@ -29,8 +29,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler({FilmAlreadyExistsException.class})
-    public ResponseEntity<Object> handleFilmAlreadyExistsException(RuntimeException ex) {
+    @ExceptionHandler({ProductionAlreadyExistsException.class})
+    public ResponseEntity<Object> handleProductionAlreadyExistsException(RuntimeException ex) {
         ErrorResponse errorResponse = new ErrorResponse("error", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }

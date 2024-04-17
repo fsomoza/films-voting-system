@@ -18,8 +18,8 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
     @Query("SELECT p FROM Production p WHERE prod_type(p) = SHOW")
     List<Show> findAllShows();
 
-    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Production p WHERE prod_type = 'FILM' AND p.title = :title")
-    boolean existsFilmByName(@Param("title") String title);
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Production p WHERE prod_type = :prodType AND p.title = :title")
+    boolean existsProductionByName(@Param("title") String title, @Param("prodType") String prodType);
 
 
 }

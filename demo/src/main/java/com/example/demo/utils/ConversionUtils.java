@@ -1,12 +1,10 @@
 package com.example.demo.utils;
 
-import com.example.demo.dto.EmployeeDTO;
-import com.example.demo.dto.EmployeeResponseDTO;
-import com.example.demo.dto.FilmDTO;
-import com.example.demo.dto.ProductionDTO;
+import com.example.demo.dto.*;
 import com.example.demo.model.Employee;
 import com.example.demo.model.Film;
 import com.example.demo.model.Production;
+import com.example.demo.model.Show;
 
 public class ConversionUtils {
 
@@ -31,10 +29,10 @@ public class ConversionUtils {
     }
 
     private static void mapCommonProductionFields(ProductionDTO dto, Production production) {
-        production.setTitle(dto.getTitle());
+        production.setTitle(dto.getTitle().trim());
         production.setYear(dto.getYear());
-        production.setDirector(dto.getDirector());
-        production.setGenre(dto.getGenre());
+        production.setDirector(dto.getDirector().trim());
+        production.setGenre(dto.getGenre().trim());
         Employee proposer = new Employee();
         proposer.setId(dto.getProposerId());
         production.setProposer(proposer);
@@ -53,12 +51,12 @@ public class ConversionUtils {
     }
 
     // Conversion from ShowDTO to Show entity
-//    public static Show convertToShowEntity(ShowDTO dto) {
-//        Show show = new Show();
-//        mapCommonProductionFields(dto, show);
-//        show.setSeasons(dto.getSeasons());
-//        return show;
-//    }
+    public static Show convertToShowEntity(ShowDTO dto) {
+        Show show = new Show();
+        mapCommonProductionFields(dto, show);
+        show.setSeasons(dto.getSeasons());
+        return show;
+    }
 
 
     private static void mapCommonProductionFieldsToDto(Production production, ProductionDTO dto) {
