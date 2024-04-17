@@ -25,7 +25,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({EmailAlreadyExistsException.class})
     public ResponseEntity<Object> handleEmailAlreadyExistsException(RuntimeException ex) {
-        ErrorResponse errorResponse = new ErrorResponse("Email must be an unique field", ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse("error", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({ProductionAlreadyExistsException.class})
+    public ResponseEntity<Object> handleProductionAlreadyExistsException(RuntimeException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("error", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
@@ -33,6 +39,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleException(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse("Internal Server Error", "An unexpected error occurred. Please try again later.");
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({ProductionNotFoundException.class})
+    public ResponseEntity<Object> handleProductionNotFoundException(RuntimeException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("Resource not found", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
 

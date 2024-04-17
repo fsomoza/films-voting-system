@@ -1,12 +1,11 @@
 package com.example.demo.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.Value;
+import lombok.*;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-@Value
+@Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @Entity

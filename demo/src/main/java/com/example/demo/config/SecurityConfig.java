@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/login/**", "/register/**").permitAll()  // Use antMatchers for string patterns
-                        .antMatchers("/admin_only/**","/api/employees/**" ).hasAuthority("ADMIN")  // Same here
+                        .antMatchers("/admin_only/**","/addFilm/**").hasAuthority("ADMIN")  // Same here
                         .anyRequest().authenticated()
                 ).userDetailsService(userDetailsServiceImp)
                 .sessionManagement(session->session

@@ -1,6 +1,9 @@
 package com.example.demo.validator;
 
 import com.example.demo.dto.EmployeeDTO;
+import com.example.demo.dto.FilmDTO;
+import com.example.demo.dto.ProductionDTO;
+import com.example.demo.dto.ShowDTO;
 import com.example.demo.model.Film;
 import com.example.demo.model.Production;
 import com.example.demo.model.Show;
@@ -41,7 +44,7 @@ public class ValidatorUtils {
     }
 
     // Validate common production fields
-    public static void validateProduction(Production production) {
+    public static void validateProduction(ProductionDTO production) {
         List<String> errors = new ArrayList<>();
         if (production.getTitle() == null || production.getTitle().trim().isEmpty()) {
             errors.add("Title cannot be empty.");
@@ -59,10 +62,10 @@ public class ValidatorUtils {
         if (production.getRegisterDate() == null) {
             errors.add("Register date cannot be null.");
         }
-        if (production.getProposer() == null) {
+        if (production.getProposerId() == null) {
             errors.add("Proposer cannot be null.");
         }
-        if (production.getRegister() == null) {
+        if (production.getRegisterId() == null) {
             errors.add("Register cannot be null.");
         }
         if (!errors.isEmpty()) {
@@ -71,7 +74,7 @@ public class ValidatorUtils {
     }
 
 
-    public static void validateShow(Show show) {
+    public static void validateShow(ShowDTO show) {
         validateProduction(show);
         List<String> errors = new ArrayList<>();
         if (show.getSeasons() <= 0) {
@@ -82,7 +85,7 @@ public class ValidatorUtils {
         }
     }
 
-    public static void validateFilm(Film film) {
+    public static void validateFilm(FilmDTO film) {
         validateProduction(film);
         List<String> errors = new ArrayList<>();
         if (film.getLength() <= 0) {
