@@ -45,7 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeResponseDTO> getAllEmployees() {
         return employeeRepository.findAll().stream()       // Convert the list to a stream
-                .map(ConversionUtils::entityToDto)  // Map each entity to DTO
+                .map(ConversionUtils::entityToDTO)  // Map each entity to DTO
                 .collect(Collectors.toList());  // Collect results into a list
     }
 
@@ -67,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee result;
         Optional<Employee> employee = employeeRepository.findById(id);
         if (employee.isPresent()){
-            return ConversionUtils.entityToDto(employee.get());
+            return ConversionUtils.entityToDTO(employee.get());
         }else{
             throw new EmployeeNotFoundException(id);
         }
@@ -108,7 +108,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDb.setFrontend(employee.isFrontend());
         employeeDb.setAge(employee.getAge());
         employeeDb.setEmail(employee.getEmail());
-        return ConversionUtils.entityToDto(employeeRepository.save(employeeDb));
+        return ConversionUtils.entityToDTO(employeeRepository.save(employeeDb));
     }
 
     @Override

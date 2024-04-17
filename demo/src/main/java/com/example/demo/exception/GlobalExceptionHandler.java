@@ -41,6 +41,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler({ProductionNotFoundException.class})
+    public ResponseEntity<Object> handleProductionNotFoundException(RuntimeException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("Resource not found", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
 
 
 

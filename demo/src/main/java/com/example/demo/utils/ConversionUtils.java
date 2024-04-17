@@ -5,6 +5,10 @@ import com.example.demo.model.Employee;
 import com.example.demo.model.Film;
 import com.example.demo.model.Production;
 import com.example.demo.model.Show;
+import org.springframework.security.core.parameters.P;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConversionUtils {
 
@@ -19,7 +23,7 @@ public class ConversionUtils {
         return entity;
     }
 
-    public static EmployeeResponseDTO entityToDto(Employee entity) {
+    public static EmployeeResponseDTO entityToDTO(Employee entity) {
         EmployeeResponseDTO dto = new EmployeeResponseDTO();
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
@@ -51,34 +55,63 @@ public class ConversionUtils {
     }
 
     // Conversion from ShowDTO to Show entity
-    public static Show convertToShowEntity(ShowDTO dto) {
+    public static Show dtoToEntity(ShowDTO dto) {
         Show show = new Show();
         mapCommonProductionFields(dto, show);
         show.setSeasons(dto.getSeasons());
         return show;
     }
 
-
-    private static void mapCommonProductionFieldsToDto(Production production, ProductionDTO dto) {
+    private static void mapEntityToCommonDTO(Production production, ProductionDTO dto) {
         dto.setTitle(production.getTitle());
         dto.setYear(production.getYear());
         dto.setDirector(production.getDirector());
         dto.setGenre(production.getGenre());
+
         if (production.getProposer() != null) {
             dto.setProposerId(production.getProposer().getId());
         }
-        dto.setAverageScore(production.getAverageScore());
         if (production.getRegister() != null) {
             dto.setRegisterId(production.getRegister().getId());
         }
         dto.setRegisterDate(production.getRegisterDate());
     }
 
-    // Conversion from Film entity to FilmDTO
-    public static FilmDTO entityToDto(Film film) {
+    public static FilmDTO entityToDTO(Film film) {
         FilmDTO dto = new FilmDTO();
-        mapCommonProductionFieldsToDto(film, dto);
+        mapEntityToCommonDTO(film, dto);
         dto.setLength(film.getLength());
         return dto;
     }
+
+    public static ShowDTO entityToDTO(Show show) {
+        ShowDTO dto = new ShowDTO();
+        mapEntityToCommonDTO(show, dto);
+        dto.setSeasons(show.getSeasons());
+        return dto;
+    }
+
+    public static List<Object> entityToDTO(List<Production> productions) {
+        return productions.stream()
+                .map(ConversionUtils::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public static Object entityToDTO(Production production) {
+        return convertToDTO(production);
+    }
+
+    private static Object convertToDTO(Production production) {
+        if (production instanceof Film) {
+            return ConversionUtils.entityToDTO((Film) production);
+        } else if (production instanceof Show) {
+            return ConversionUtils.entityToDTO((Show) production);
+        } else {
+            throw new IllegalArgumentException("Unsupported production type: " + production.getClass());
+        }
+    }
+
+
+
+
 }
