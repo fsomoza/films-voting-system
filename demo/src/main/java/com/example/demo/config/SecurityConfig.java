@@ -4,6 +4,7 @@ import com.example.demo.filter.JwtAuthenticationFilter;
 import com.example.demo.service.impl.UserDetailsServiceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -42,8 +43,14 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/login/**", "/register/**").permitAll()  // Use antMatchers for string patterns
-                        .antMatchers("/admin_only/**","/addFilm/**").hasAuthority("ADMIN")  // Same here
+                        .antMatchers("/register","/login").permitAll() // Allow registration and login without authentication
+                        .antMatchers("/admin_only/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.PUT,"/productions/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.POST,"/productions/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.DELETE,"/productions/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.POST,"/api/employees/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.PUT,"/api/employees/**").hasAuthority("ADMIN")
+                        .antMatchers(HttpMethod.DELETE,"/api/employees/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 ).userDetailsService(userDetailsServiceImp)
                 .sessionManagement(session->session

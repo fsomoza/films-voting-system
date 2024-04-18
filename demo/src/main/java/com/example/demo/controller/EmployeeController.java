@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.dto.EmployeeResponseDTO;
+import com.example.demo.service.ProductionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,12 @@ public class EmployeeController {
 
 
     private EmployeeService employeeService;
+
+    private final ProductionService productionService;
     @Autowired
-    public EmployeeController(EmployeeService employeeService){
+    public EmployeeController(EmployeeService employeeService,ProductionService productionService){
         this.employeeService = employeeService;
+        this.productionService = productionService;
     }
 
     @PutMapping("/{id}")
@@ -34,6 +38,11 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
         return ResponseEntity.ok(employeeService.getAllEmployees());
+    }
+
+    @GetMapping("/highestScorePropose")
+    public ResponseEntity<EmployeeResponseDTO> returnEmployeeWithHighestScoreProposed() {
+        return ResponseEntity.ok(productionService.returnEmployeeWithHighestScoreProposed());
     }
 
 
