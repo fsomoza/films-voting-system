@@ -1,8 +1,10 @@
 package com.example.demo.repository;
 
+import com.example.demo.model.Employee;
 import com.example.demo.model.Film;
 import com.example.demo.model.Production;
 import com.example.demo.model.Show;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,6 +48,10 @@ public interface ProductionRepository extends JpaRepository<Production, Long> {
 
     @Query("SELECT p FROM Production p WHERE TYPE(p) = Show AND p.id = :id")
     Show findShowById(@Param("id") long id);
+
+    @Query("SELECT e FROM Production p JOIN p.votes v JOIN p.proposer e GROUP BY e.id, e.name, e.email, e.age ORDER BY AVG(v.score) DESC")
+    List<Employee> findEmployeeWithHighestScoringProduction(Pageable pageable);
+
 
 
 }

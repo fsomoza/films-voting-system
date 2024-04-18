@@ -67,6 +67,7 @@ public class ConversionUtils {
         dto.setYear(production.getYear());
         dto.setDirector(production.getDirector());
         dto.setGenre(production.getGenre());
+        dto.setAverageScore(production.getAverageScore());
 
         if (production.getProposer() != null) {
             dto.setProposerId(production.getProposer().getId());

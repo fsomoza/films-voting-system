@@ -42,7 +42,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(EmployeeDTO request) {
 
-       Employee employee = employeeService.saveEmployee(request);
+       Employee employee = employeeService.saveEmployee(request, false);
 
         String jwt = jwtService.generateToken(employee);
 

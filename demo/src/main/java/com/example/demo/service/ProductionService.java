@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.EmployeeResponseDTO;
 import com.example.demo.dto.FilmDTO;
 import com.example.demo.dto.ProductionDTO;
 import com.example.demo.dto.ShowDTO;
@@ -26,5 +27,7 @@ public interface ProductionService {
     ShowDTO updateShow(ShowDTO showDTO, long id);
 
     void deleteProduction(long id);
+
+    EmployeeResponseDTO returnEmployeeWithHighestScoreProposed();
 
 }

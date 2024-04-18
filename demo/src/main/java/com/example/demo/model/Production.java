@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,5 +26,11 @@ public abstract class Production {
     @JoinColumn(name = "register_id")
     private Employee register;
     private LocalDateTime registerDate;
+    @OneToMany(mappedBy = "production" , fetch = FetchType.EAGER)
+    private List<Vote> votes;
+
+    public double getAverageScore() {
+        return votes.isEmpty() ? 0.0 : votes.stream().mapToDouble(Vote::getScore).average().orElse(0.0);
+    }
 }
 

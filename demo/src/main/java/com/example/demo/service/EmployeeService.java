@@ -7,7 +7,7 @@ import com.example.demo.dto.EmployeeResponseDTO;
 import com.example.demo.model.Employee;
 
 public interface EmployeeService {
-    Employee saveEmployee(EmployeeDTO employee);
+    Employee saveEmployee(EmployeeDTO employee, boolean isFirst);
     List<EmployeeResponseDTO> getAllEmployees();
     Employee getEmployeeById(Long id);
 

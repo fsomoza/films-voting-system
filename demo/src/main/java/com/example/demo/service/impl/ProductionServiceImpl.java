@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.EmployeeResponseDTO;
 import com.example.demo.dto.FilmDTO;
 import com.example.demo.dto.ProductionDTO;
 import com.example.demo.dto.ShowDTO;
@@ -16,11 +17,10 @@ import com.example.demo.service.ProductionService;
 import com.example.demo.utils.ConversionUtils;
 import com.example.demo.validator.ValidatorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -34,8 +34,6 @@ public class ProductionServiceImpl implements ProductionService {
     private final ProductionRepository productionRepository;
     private final EmployeeService employeeService;
 
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
      public ProductionServiceImpl(ProductionRepository productionRepository, EmployeeService employeeService){
@@ -66,6 +64,12 @@ public class ProductionServiceImpl implements ProductionService {
     @Override
     public ProductionDTO updateProduction(ProductionDTO productionDTO, long id) {
         return null;
+    }
+
+
+    public EmployeeResponseDTO returnEmployeeWithHighestScoreProposed() {
+
+        return ConversionUtils.entityToDTO(productionRepository.findEmployeeWithHighestScoringProduction(PageRequest.of(0, 1)).stream().findFirst().orElse(null));
     }
 
 

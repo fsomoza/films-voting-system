@@ -33,12 +33,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public Employee saveEmployee(EmployeeDTO employeeDto) {
+    public Employee saveEmployee(EmployeeDTO employeeDto, boolean isFirst) {
           ValidatorUtils.validateEmployee(employeeDto, false);
           this.checkIfEmailExists(employeeDto.getEmail());
           employeeDto.setPassword(passwordEncoder.encode(employeeDto.getPassword()));
           Employee employee =  ConversionUtils.dtoToEntity(employeeDto);
-          employee.setRole(Role.USER);
+          //development code to create the first admin user
+          if (isFirst){
+              employee.setRole(Role.ADMIN);
+          }else{
+              employee.setRole(Role.USER);
+          }
+
           return employeeRepository.save(employee);
     }
 
