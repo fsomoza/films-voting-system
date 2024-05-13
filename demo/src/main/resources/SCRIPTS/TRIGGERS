@@ -1,0 +1,21 @@
+CREATE OR REPLACE FUNCTION cleverpy_test.update_average_score()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Calculate the new average score for the production
+    UPDATE cleverpy_test.production
+    SET average_score = (
+        SELECT AVG(score)
+        FROM cleverpy_test.votes
+        WHERE production_id = NEW.production_id
+    )
+    WHERE id = NEW.production_id;
+
+    -- Return the new vote to indicate it should be inserted
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_average_score
+AFTER INSERT ON cleverpy_test.votes
+FOR EACH ROW
+EXECUTE FUNCTION cleverpy_test.update_average_score();

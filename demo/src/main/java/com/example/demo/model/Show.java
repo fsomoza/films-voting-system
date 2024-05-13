@@ -7,7 +7,7 @@ import lombok.Value;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+
 
 @Data
 @EqualsAndHashCode(callSuper = true)

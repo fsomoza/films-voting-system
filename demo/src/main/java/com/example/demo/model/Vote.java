@@ -22,4 +22,6 @@ public class Vote {
 
     @Column(nullable = false)
     private double score;
+
+    private Boolean processed;
 }

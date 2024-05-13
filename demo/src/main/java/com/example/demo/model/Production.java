@@ -26,11 +26,10 @@ public abstract class Production {
     @JoinColumn(name = "register_id")
     private Employee register;
     private LocalDateTime registerDate;
-    @OneToMany(mappedBy = "production" , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "production" , fetch = FetchType.LAZY)
     private List<Vote> votes;
-
-    public double getAverageScore() {
-        return votes.isEmpty() ? 0.0 : votes.stream().mapToDouble(Vote::getScore).average().orElse(0.0);
-    }
+    //total_votes se inicializa  a 0 porque si no el trigger que tengo para que sume los votos no funciona si está a null
+    //porque obviamente no se puede sumar sobre un nulo
+    private Long totalVotes = 0L;
 }
 

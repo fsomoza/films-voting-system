@@ -1,0 +1,66 @@
+IMPORTANTE BORRAR EL VOLUMEN DE POSTGRE SI HAGO ALGUN CAMBIO EN EL SCRIPT, SI NO NO SE VA A EJECUTAR
+
+
+CREO QUE VOY A CAMBIAR A UNA ESTRATEGIA DE UNA TABLA:
+https://chat.openai.com/share/572f5923-ee83-4864-ac1f-8c3c338adaaf
+
+CONVERSACION INTERESANTE SOBRE ESTRATEGIA DE ENDPOINTS, DA UN CONSEJO SOBRE INDEXAR LA PUNTUACIÓN MEDIA Y SOBRE PAGINACIÓN
+https://chat.openai.com/share/f1bc32bd-5f16-4adb-a9c4-17e5ac4bde3e
+
+COMO SE FORMARIA EL ENDPOINT DE DEVOLVER TODAS LAS PRODUCCIONES CON SUS FILTROS
+https://prnt.sc/1Wcy22IBKuuu
+
+TAMBIEN TENGO QUE PENSAR EN HACER VALIDACIONES A LA HORA DE CREAR/ACTUALIZAR ETC PARA QUE EN LOS CUERPOS DE LOS OBJETOS NO FALTEN CAMPOS,
+DUDA DE QUE TIPO DE ERROR DEBO DE DEVOLVER EN CASO DE QUE PASE ESTO
+PUEDE SER QUE EL PROPIO FRAMEWORK SE ENCARGE DE ESTO???????
+
+EL METODO DE VALIDACIÓN COMPROBARÁ QUE NO SEA NI NULO, NI STRING VACIO, NI STRING CON  SOLO ESPACIOS
+TAMBIEN SE ELIMINARAN ESPACIOS AL PRINCIPIO Y AL FINAL DE LOS STRINGS
+
+
+HE APRENDIDO QUE A LOMBOK NO LE MOLA QUE FORMES EL DTO CON "isBoolen" porque spring no hacia bien el mapeo con eso
+
+HE PENSADO QUE VOY A IR A POR UNA ESTRATEGIA HIBRIDA DONDE PARA HACER GET VOY A TENER UN ENDPOINT POR CADA TIPO DE PETICIÓN
+PERO PARA POST,PUT,DELETE VOY A TENER UN UNICO  ENDPOINT EN EL QUE EL TIPO DEBERÁ DE IR FLAGEADO(PELI O SERIE)
+
+he cambiado la estrategia a una sola tabla con columna para discriminar por tipo de producción,
+si fuese una app que vaya a escalar en el sentido de que se siguiesen añadiend tipos de producciones que tienen su campo unico
+posiblemente la opción de tablas unidas mediante join fuese mejor porque te ofrece un mejor balance entre normalización y performance,
+dado que si la tabla siguiese creciendo en campos, la estrategia se podria volver ineficiente. Tambien está la casuistica de que naciese la necesidad
+de hacer querys a tipos de producción concretas, como quere rescatar solo las pelis o solo las series, en ese caso la opción de las tablas con join
+posiblemente sea mas atractiva.
+obviamente tiene la contra de que implica joins entre la tabla padre y las hijas lo cual ralentiza las querys.
+
+En general la idea de porque he escogido la estrategia de una sola tabla para esta app es porque el escope declarado no contempla mas tipos por tanto creo
+que el pro de querys mas rapidas y una estructura mas simple era la adecuada.
+
+en cualquier caso si se decidiese un cambio de estrategia, debido a la comodidades que ofrece en este caso JPA seria sencillo modificar el diseño de la DB
+cambiando un par de anotaciones
+
+-----------------------------------------------
+
+
+VOY A QUITAR LA OPCIÓN DE ELIMINAR VOTOS, SOLO SE PODRÁN EDITAR, Y POR EJEMPLO PONER LA NOTA A 0
+VOY A METER UN CAMPO MAS A LOS VOTOS QUE SEA "PROCESADO" CUANDO ESE VOTO SE PROCESE PARA CALCULAR LA MEDIA TENDRÁ ESE CAMPO MARCADO
+SI LA NOTA DADA SE EDITA, EL CAMPO PROCESADO SE DESMARCARÁ (PONERLO A FALSE) Y TENDRÁ QUE SER PROCESADO
+
+LA IDEA CON TO.DO ESTE ES CREAR AHORA UNA VISTA MATERIALIZADA QUE DEVUELVA LE MEDIA DE TODAS LAS PELICULAS
+ Y QUE CADA POR EJEMPLO 50 VOTOS INSERTADOS(POR PONER UNA CIFRA) COJERA TODOS LOS VOTOS SIN  PROCESAR Y LOS SUMARÁ A LA MEDIA PARA ACTULIZAR LA
+ VISTA MATEREALIZADA, AUN ASI TENGO QUE REPENSARLO PORQUE PONGAMONOS EN UN CONTEXTO EN EL QUE TENEMOS 4 MILLONES DE PELICULAS,
+ TENDRIA UNA VISTA MATEREALIZADA CON LOS PUTOS 4 MILLONES?
+
+ NOPE NOPE NOPE, LO TENGO
+
+ LO SUYO SERIA TENER UN TRIGGER QUE CADA ESO MMMMM 50 INSERTS POR EJEMPLO, COJA ESTOS VOTOS SIN PROCESAR Y CALCULE LA MEDIA CON LA YA EXISTENTE DIRECTAMENTE
+ EN LA FILA DE LA PELICULA, CREO QUE ESTO MEJOR LO HARIA  EN BACKEND Y NO CON UN TRIGGER EN LA DB?????
+
+ PODRIA SER ALGUN TIPO DE BACH O PROCESO QUE COMPRUEBE CADA (X) TIEMPO SI EXISTE ALGUNA PRODUCCIÓN CON UN NUMERO (Y) DE VOTOS SIN PROCESAR, Y SI ES ASI
+ PROCESARLOS Y AÑADIRLOS A LA MEDIA, ASI LO QUE SE PODRIA HACER ES QUE SI POR EJEMPLO EL NUMERO DE USUARIOS Y VOTOS CRECE EXPONENCIALMENTE,
+ SE PUEDE IR AUMENTANDO EL TIEMPO Y EL NUMERO DE VOTOS QUE QUEREMOS PARA PROCEDER A ACTULIZAR LA NOTA MEDIAD E UNA PRODUCCIÓN
+
+
+
+
+
+
+

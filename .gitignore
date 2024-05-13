@@ -23,3 +23,5 @@
 hs_err_pid*
 postgres-volume/**
 postgres-volume/
+.idea/compiler.xml
+.idea/
